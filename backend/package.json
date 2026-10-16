@@ -1,0 +1,14 @@
+{
+  "name": "cp-tracker-proxy",
+  "version": "1.0.0",
+  "description": "A proxy server to cache Clist API responses",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}
