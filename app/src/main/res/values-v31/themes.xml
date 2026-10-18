@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Android 12+ system launch splash: match the app's dark background and CPCT icon -->
+    <style name="Theme.CPContestTracker" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">#0E1726</item>
+        <item name="android:navigationBarColor">#0E1726</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowBackground">#0E1726</item>
+        <item name="android:windowSplashScreenBackground">#0E1726</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+    </style>
+</resources>

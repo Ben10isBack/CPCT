@@ -5,6 +5,10 @@
     <!-- Required to fetch contest data from the Clist API -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Required to sync contests into the device calendar -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

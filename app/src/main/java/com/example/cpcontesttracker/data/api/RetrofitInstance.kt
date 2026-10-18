@@ -1,9 +1,9 @@
 package com.example.cpcontesttracker.data.api
 
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * A singleton object to provide a single instance of Retrofit throughout the app.
@@ -12,16 +12,12 @@ object RetrofitInstance {
     // We are now pointing to our Vercel Proxy instead of directly to Clist!
     private const val BASE_URL = "https://backend-rho-ochre-17.vercel.app/"
 
-    // Interceptor to log network requests and responses in Logcat
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-
+    // No BODY logging: dumping the whole JSON response to Logcat on every fetch is slow
     private val client = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
         .build()
 
-    // The Retrofit instance
     private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)

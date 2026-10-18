@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Simplified geometric chef hat for CodeChef -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M7,14h10v6H7z M6,14c-1.66,0 -3,-1.34 -3,-3c0,-1.31 0.84,-2.41 2,-2.82C5,5.86 6.86,4 9.18,4c1.19,0 2.27,0.5 3.03,1.3C12.8,4.5 14.3,4 16,4c2.21,0 4,1.79 4,4c0,0.11 -0.01,0.22 -0.02,0.32c1.16,0.41 2.02,1.51 2.02,2.82c0,1.66 -1.34,3 -3,3H6z" />
+</vector>
