@@ -21,8 +21,8 @@ android {
         minSdk = 26
         targetSdk = 36 // Google Play requires API 36 for new apps from Aug 31, 2026
         // Bump versionCode by 1 for every upload to Play
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
