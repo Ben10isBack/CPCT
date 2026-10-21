@@ -14,3 +14,12 @@
 .cxx
 local.properties
 node_modules/
+
+# Release signing (never commit)
+keystore.properties
+*.jks
+*.keystore
+
+# Local secrets
+.env
+.env.*

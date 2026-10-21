@@ -27,10 +27,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -83,7 +85,8 @@ private val CALENDAR_PERMISSIONS = arrayOf(
 @Composable
 fun ContestListScreen(
     viewModel: ContestViewModel,
-    onFilterClick: () -> Unit
+    onPlatformsClick: () -> Unit,
+    onAboutClick: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val calendarState by viewModel.calendarState.collectAsStateWithLifecycle()
@@ -160,9 +163,7 @@ fun ContestListScreen(
                     IconButton(onClick = viewModel::refresh) {
                         Icon(Icons.Default.Refresh, contentDescription = "Refresh", tint = TextSecondary)
                     }
-                    IconButton(onClick = onFilterClick) {
-                        Icon(Icons.Default.Settings, contentDescription = "Choose platforms", tint = TextSecondary)
-                    }
+                    OverflowMenu(onPlatformsClick = onPlatformsClick, onAboutClick = onAboutClick)
                 }
             )
         }
@@ -277,6 +278,36 @@ private fun groupLabel(item: ContestItem, now: Long, today: Long): String = when
     item.startEpochDay == today -> "Today"
     item.startEpochDay == today + 1 -> "Tomorrow"
     else -> item.dayText
+}
+
+/** Three-dot menu in the top bar: platform selection and the About page. */
+@Composable
+private fun OverflowMenu(onPlatformsClick: () -> Unit, onAboutClick: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box {
+        IconButton(onClick = { expanded = true }) {
+            Icon(Icons.Default.MoreVert, contentDescription = "More options", tint = TextSecondary)
+        }
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            DropdownMenuItem(
+                text = { Text("Platforms") },
+                leadingIcon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    onPlatformsClick()
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("About") },
+                leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
+                onClick = {
+                    expanded = false
+                    onAboutClick()
+                }
+            )
+        }
+    }
 }
 
 /** Top-bar chip showing the sync state and account; tapping it opens the sync options. */

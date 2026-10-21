@@ -10,3 +10,17 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+# --- CPCT ---
+# Gson builds these models by reflection: keep their fields and @SerializedName names
+-keep class com.example.cpcontesttracker.data.model.** { *; }
+-keepattributes Signature, *Annotation*, InnerClasses, EnclosingMethod
+
+# Gson TypeToken (used to read the offline cache) needs its generic signature
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class * extends com.google.gson.reflect.TypeToken
+
+# Retrofit suspend functions under R8 full mode
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+-keep,allowobfuscation interface com.example.cpcontesttracker.data.api.ClistApiService

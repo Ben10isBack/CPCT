@@ -14,11 +14,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.cpcontesttracker.ui.AboutScreen
 import com.example.cpcontesttracker.ui.CPCTTheme
 import com.example.cpcontesttracker.ui.ContestListScreen
 import com.example.cpcontesttracker.ui.ContestViewModel
 import com.example.cpcontesttracker.ui.PlatformSelectionScreen
 import com.example.cpcontesttracker.ui.SplashScreen
+
+private enum class Screen { SPLASH, ONBOARDING, CONTESTS, PLATFORMS, ABOUT }
 
 class MainActivity : ComponentActivity() {
 
@@ -54,27 +57,48 @@ class MainActivity : ComponentActivity() {
                     if (hasSelectedPlatforms) viewModel.fetchContests(selectedPlatforms)
                 }
 
-                Crossfade(targetState = showSplash, label = "splash") { splash ->
-                    when {
-                        splash -> SplashScreen(onFinished = { showSplash = false })
+                // Page opened from the main screen's menu
+                var screen by rememberSaveable { mutableStateOf(Screen.CONTESTS) }
 
-                        // Show Onboarding / Platform Selection Screen
-                        !hasSelectedPlatforms -> PlatformSelectionScreen(
+                val savePlatforms = { platforms: Set<String> ->
+                    sharedPref.edit()
+                        .putStringSet("platforms", platforms)
+                        .putBoolean("has_selected", true)
+                        .apply()
+
+                    selectedPlatforms = platforms
+                    hasSelectedPlatforms = true
+                    screen = Screen.CONTESTS
+                }
+
+                val destination = when {
+                    showSplash -> Screen.SPLASH
+                    !hasSelectedPlatforms -> Screen.ONBOARDING
+                    else -> screen
+                }
+
+                Crossfade(targetState = destination, label = "screen") { target ->
+                    when (target) {
+                        Screen.SPLASH -> SplashScreen(onFinished = { showSplash = false })
+
+                        // First launch: pick platforms, nothing to go back to
+                        Screen.ONBOARDING -> PlatformSelectionScreen(
                             initialSelection = selectedPlatforms,
-                            onSave = { platforms ->
-                                sharedPref.edit()
-                                    .putStringSet("platforms", platforms)
-                                    .putBoolean("has_selected", true)
-                                    .apply()
-
-                                selectedPlatforms = platforms
-                                hasSelectedPlatforms = true
-                            }
+                            onSave = savePlatforms
                         )
 
-                        else -> ContestListScreen(
+                        Screen.PLATFORMS -> PlatformSelectionScreen(
+                            initialSelection = selectedPlatforms,
+                            onSave = savePlatforms,
+                            onBack = { screen = Screen.CONTESTS }
+                        )
+
+                        Screen.ABOUT -> AboutScreen(onBack = { screen = Screen.CONTESTS })
+
+                        Screen.CONTESTS -> ContestListScreen(
                             viewModel = viewModel,
-                            onFilterClick = { hasSelectedPlatforms = false }
+                            onPlatformsClick = { screen = Screen.PLATFORMS },
+                            onAboutClick = { screen = Screen.ABOUT }
                         )
                     }
                 }
